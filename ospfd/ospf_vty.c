@@ -10168,6 +10168,21 @@ static int config_write_virtual_link(struct vty *vty, struct ospf *ospf)
 			else
 				vty_out(vty, " area %s virtual-link %s\n", buf,
 					inet_ntoa(vl_data->vl_peer));
+			/* Authentication type */
+			if (OSPF_IF_PARAM(oi, auth_type) != OSPF_AUTH_NULL &&
+			    OSPF_IF_PARAM(oi, auth_type) != OSPF_AUTH_NOTSET) {
+				if (OSPF_IF_PARAM(oi, auth_type) ==
+						  OSPF_AUTH_SIMPLE)
+					vty_out(vty,
+						" area %s virtual-link %s authentication\n",
+						buf,
+						inet_ntoa(vl_data->vl_peer));
+				else
+					vty_out(vty,
+						" area %s virtual-link %s authentication message-digest\n",
+						buf,
+						inet_ntoa(vl_data->vl_peer));
+			}
 			/* Auth key */
 			if (IF_DEF_PARAMS(vl_data->vl_oi->ifp)->auth_simple[0]
 			    != '\0')
